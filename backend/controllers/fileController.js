@@ -1,25 +1,40 @@
-const GeoFile = require('../models/File');
+const Shape = require('../models/Shape');
+const Marker = require('../models/Marker');
 
-exports.uploadFile = async (req, res) => {
-  const { file } = req;
+exports.saveShapes = async (req, res) => {
   try {
-    const geoFile = new GeoFile({
-      userId: req.user.id,
-      filename: file.originalname,
-      fileType: file.mimetype.includes('geojson') ? 'GeoJSON' : 'KML', // Add TIFF support as needed
-    });
-    await geoFile.save();
-    res.status(201).json({ message: "File uploaded successfully", geoFile });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const { shapes } = req.body;
+    await Shape.create({ user: req.user._id, shapes });
+    res.status(201).json({ message: 'Shapes saved successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to save shapes' });
   }
 };
 
-exports.getFiles = async (req, res) => {
+exports.getShapes = async (req, res) => {
   try {
-    const files = await GeoFile.find({ userId: req.user.id });
-    res.json(files);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const shapes = await Shape.findOne({ user: req.user._id });
+    res.status(200).json(shapes ? shapes.shapes : []);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to load shapes' });
+  }
+};
+
+exports.saveMarkers = async (req, res) => {
+  try {
+    const { markers } = req.body;
+    await Marker.create({ user: req.user._id, markers });
+    res.status(201).json({ message: 'Markers saved successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to save markers' });
+  }
+};
+
+exports.getMarkers = async (req, res) => {
+  try {
+    const markers = await Marker.findOne({ user: req.user._id });
+    res.status(200).json(markers ? markers.markers : []);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to load markers' });
   }
 };

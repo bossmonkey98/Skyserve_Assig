@@ -1,20 +1,25 @@
 <template>
   <div id="app">
+    <header>
+      <nav>
+        <router-link to="/">Home</router-link>
+        <router-link to="/login">Login</router-link>
+      </nav>
+    </header>
     <router-view />
   </div>
 </template>
 
-<script setup>
-import { useStore } from 'vuex';
-const store = useStore();
-</script>
-
 <style>
-/* Global styling */
-body, html, #app {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #333;
+  padding: 10px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
 }
 </style>

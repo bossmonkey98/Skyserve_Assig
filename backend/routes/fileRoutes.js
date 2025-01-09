@@ -1,12 +1,12 @@
 const express = require('express');
-const multer = require('multer');
-const { protect } = require('../middleware/auth');
-const { uploadFile, getFiles } = require('../controllers/fileController');
+const authMiddleware = require('../middleware/authMiddleware');
+const { saveShapes, getShapes, saveMarkers, getMarkers } = require('../controllers/fileController');
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
 
-router.post('/upload', protect, upload.single('file'), uploadFile);
-router.get('/', protect, getFiles);
+router.post('/saveShapes', authMiddleware, saveShapes);
+router.get('/getShapes', authMiddleware, getShapes);
+router.post('/saveMarkers', authMiddleware, saveMarkers);
+router.get('/getMarkers', authMiddleware, getMarkers);
 
 module.exports = router;
