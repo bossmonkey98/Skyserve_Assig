@@ -28,6 +28,17 @@ export default createStore({
     },
   },
   actions: {
+    // store/index.js
+    async signup({ commit }, userData) {
+      try {
+        const response = await axios.post('/api/users/register', userData);
+        commit('setUser', response.data.user);
+        commit('setToken', response.data.token);
+      } catch (error) {
+        throw error;
+      }
+    },
+
     async login({ commit }, credentials) {
       try {
         const response = await axios.post(`${apiBaseUrl}/users/login`, credentials);

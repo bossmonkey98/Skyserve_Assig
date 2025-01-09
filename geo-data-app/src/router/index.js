@@ -1,18 +1,22 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/HomeView.vue";
-import Upload from "../views/UploadFile.vue";
-import MapView from "../views/MapView.vue";
-import Login from "../views/LoginView.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import MapView from '../views/MapView.vue';
+import LoginView from '../views/LoginView.vue';
 
 const routes = [
-  { path: "/", name: "Home", component: Home },
-  { path: "/upload", name: "Upload", component: Upload },
-  { path: "/map", name: "MapView", component: MapView },
-  { path: "/login", name: "Login", component: Login },
+  {
+    path: '/',
+    name: 'Home',
+    component: MapView, // Set MapView as the home page
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginView,
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
