@@ -1,4 +1,4 @@
-const GeoFile = require('../models/GeoFile');
+const GeoFile = require('../models/File');
 
 exports.uploadFile = async (req, res) => {
   const { file } = req;
