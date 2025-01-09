@@ -1,28 +1,76 @@
 import { createStore } from 'vuex';
+import axios from 'axios';
+
+const apiBaseUrl = 'http://localhost:5000/api'; // Base URL for backend API
 
 export default createStore({
   state: {
     user: null,
-    geoData: [], // Store for uploaded files and shapes
+    token: null,
+    geoData: [],
+    markers: [],
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
     },
+    setToken(state, token) {
+      state.token = token;
+    },
     addGeoData(state, data) {
       state.geoData.push(data);
     },
-    removeGeoData(state, id) {
-      state.geoData = state.geoData.filter((item) => item.id !== id);
+    addMarker(state, marker) {
+      state.markers.push(marker);
+    },
+    removeMarker(state, id) {
+      state.markers = state.markers.filter((m) => m.id !== id);
     },
   },
   actions: {
-    uploadFile({ commit }, file) {
-      // Upload file logic (integration with backend)
-      commit('addGeoData', file);
+    // store/index.js
+    async signup({ commit }, userData) {
+      try {
+        const response = await axios.post('/api/users/register', userData);
+        commit('setUser', response.data.user);
+        commit('setToken', response.data.token);
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    async login({ commit }, credentials) {
+      try {
+        const response = await axios.post(`${apiBaseUrl}/users/login`, credentials);
+        commit('setUser', response.data);
+        commit('setToken', response.data.token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      } catch (error) {
+        throw new Error('Login failed');
+      }
+    },
+    async uploadFile({ commit }, file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axios.post(`${apiBaseUrl}/files/upload`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        commit('addGeoData', response.data);
+      } catch (error) {
+        console.error('File upload failed:', error);
+      }
+    },
+    addMarker({ commit }, marker) {
+      commit('addMarker', marker);
+    },
+    removeMarker({ commit }, id) {
+      commit('removeMarker', id);
     },
   },
   getters: {
     allGeoData: (state) => state.geoData,
+    allMarkers: (state) => state.markers,
   },
 });
