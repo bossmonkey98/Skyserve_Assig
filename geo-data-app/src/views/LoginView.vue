@@ -31,6 +31,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
@@ -38,6 +39,7 @@ const username = ref('');
 const isSignup = ref(false);
 const error = ref(null);
 const store = useStore();
+const router = useRouter();
 
 function toggleAuth() {
   isSignup.value = !isSignup.value;
@@ -58,6 +60,8 @@ async function handleSubmit() {
         password: password.value,
       });
     }
+    // Navigate to home page after successful login/signup
+    router.push('/'); // Change '/home' to your actual home route
   } catch (err) {
     error.value = err.response?.data?.message || 'An error occurred';
   }

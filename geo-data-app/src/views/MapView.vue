@@ -88,7 +88,7 @@ function trySaveShapes() {
 async function saveShapes() {
   try {
     const shapes = drawnItems.toGeoJSON();
-    await axios.post('/api/files/saveShapes', { shapes });
+    await axios.post(`${process.env.VUE_APP_BASE_URL}/api/files/saveShapes`, { shapes });
     alert('Shapes saved successfully!');
   } catch (error) {
     console.error('Failed to save shapes:', error);
@@ -106,7 +106,7 @@ function trySaveMarkers() {
 async function saveMarkers() {
   try {
     const markers = store.getters.allMarkers;
-    await axios.post('/api/files/saveMarkers', { markers });
+    await axios.post(`${process.env.VUE_APP_BASE_URL}/api/files/saveMarkers`, { markers });
     alert('Markers saved successfully!');
   } catch (error) {
     console.error('Failed to save markers:', error);
@@ -115,7 +115,7 @@ async function saveMarkers() {
 
 async function loadShapes() {
   try {
-    const response = await axios.get('/api/files/getShapes');
+    const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/files/getShapes`);
     const shapes = response.data;
     L.geoJSON(shapes).addTo(map);
   } catch (error) {
@@ -125,7 +125,7 @@ async function loadShapes() {
 
 async function loadMarkers() {
   try {
-    const response = await axios.get('/api/files/getMarkers');
+    const response = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/files/getMarkers`);
     const markers = response.data;
     markers.forEach((marker) => {
       const leafletMarker = L.marker(marker.coordinates, { draggable: true }).addTo(map);

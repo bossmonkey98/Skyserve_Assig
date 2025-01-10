@@ -31,10 +31,10 @@
   
   onMounted(async () => {
     try {
-      const markersResponse = await axios.get('/api/files/getMarkers');
+      const markersResponse = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/files/getMarkers`);
       markers.value = markersResponse.data;
   
-      const shapesResponse = await axios.get('/api/files/getShapes');
+      const shapesResponse = await axios.get(`${process.env.VUE_APP_BASE_URL}/api/files/getShapes`);
       shapes.value = shapesResponse.data.features;
     } catch (error) {
       console.error('Failed to load saved data:', error);
